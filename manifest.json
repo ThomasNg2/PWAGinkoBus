@@ -45,6 +45,12 @@
       "type": "image/png"
     },
     {
+      "src": "icons/icon-274.png",
+      "sizes": "274x274",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
