@@ -29,7 +29,6 @@ self.addEventListener("install", (e) => {
 
 self.addEventListener("fetch", (e) => {
   const structuralRequest = e.request.url.startsWith('https://thomasng2');
-  const structuralRequest = e.request.url.startsWith('https://thomasng2');
   e.respondWith(
     (async () => {
       if (structuralRequest) { // Cache-only for non changing data
