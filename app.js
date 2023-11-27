@@ -587,8 +587,4 @@ document.addEventListener("DOMContentLoaded", function (_e) {
             document.body.classList.remove("fade");
         });
     }
-
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js");
-    }
 });
