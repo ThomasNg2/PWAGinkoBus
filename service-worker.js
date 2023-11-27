@@ -28,19 +28,26 @@ self.addEventListener("install", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
-  console.log(e.request.url);
+  const structuralRequest = e.request.url.startsWith('https://thomasng2');
   e.respondWith(
     (async () => {
-      const r = await caches.match(e.request);
-      console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
-      if (r) {
+      if (structuralRequest) { // Cache-only for non changing data
+        console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
+        const r = await caches.match(e.request);
         return r;
       }
-      const response = await fetch(e.request);
-      const cache = await caches.open(cacheName);
-      console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
-      cache.put(e.request, response.clone());
-      return response;
+      fetch(e.request) // Always poll network otherwise
+      .then(async (networkResponse) => { // Network responded : cache answer and return it
+        console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
+        const cache = await caches.open(cacheName);
+        cache.put(e.request, networkResponse.clone);
+        return networkResponse;
+      })
+      .catch(() => {
+        console.log(`[Service worker] Attempt to take from cache : ${e.request.url}`);
+        return caches.match(e.request); // Network request failed : resort to cache
+      }) 
+      
     })(),
   );
 });
